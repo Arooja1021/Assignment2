@@ -2,9 +2,9 @@
 
 int main() {
 
-	Laser laser;
-	laser.connect();
-	laser.recieveData();
+	Laser^ laser = gcnew Laser();
+	laser->connect();
+	laser->recieveData();
 
 	while (1) {}
 

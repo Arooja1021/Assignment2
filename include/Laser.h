@@ -2,14 +2,28 @@
 
 #include <SMObject.h>
 #include <smstructs.h>
+#include <networked_module.h>
 
 
-ref class Laser {
+ref class Laser : public networked_module{
 public:
-	int connect();
-	int recieveData();
+	error_state setupSharedMemory() override;
+
+	error_state processSharedMemory() override;
+
+	bool getShutdownFlag() override;
+
+	error_state setHeartbeat(bool heartbeat) override;
+
+
+	error_state connect(String^ hostName, int portNumber) override;
+	error_state communicate() override;
+
+	int connect() override;
+	int recieveData() override;
+
 
 protected:
-	NetworkStream^ Stream;
+
 
 };

@@ -1,9 +1,4 @@
-/*
-	 File:          PMM.cpp
-	 Description:   Functionality of Process Management functions
-	 Author:        Justin Duong
-	 Platform:      Windows
- */
+
 
 #include <PMM.h>
 #include <SMObject.h>
