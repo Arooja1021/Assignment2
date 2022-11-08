@@ -6,7 +6,18 @@ int main() {
 	laser->connect();
 	laser->recieveData();
 
-	while (1) {}
+	
+		
+	SMObject PMObj(TEXT("PMObj"), sizeof(SM_ProcessManagement));
+	SM_ProcessManagement* PMMPtr;
+		
+	PMObj.SMAccess();
+	PMMPtr = (SM_ProcessManagement*)PMObj.pData;
+	
+	while (!PMMPtr->Shutdown.Status) {
+		
+	}
+
 
 	return 0;
 }

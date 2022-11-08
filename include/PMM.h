@@ -4,8 +4,18 @@
 #include <smstructs.h>
 #include <SMObject.h>
 
+value struct WeederProcessess
+{
+    String^ ModuleName;
+    bool Critical;
+    int CrashCount;
+    int CrashCountLimit;
+    Process^ ProcessName;
+};
+
 ref class ProcessManagement : public UGV_module {
 public:
+    SMObject* tes;
     // Create and access shared memory objects
     error_state setupSharedMemory() override;
 

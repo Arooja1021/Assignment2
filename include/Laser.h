@@ -5,6 +5,7 @@
 #include <networked_module.h>
 
 
+
 ref class Laser : public networked_module{
 public:
 	error_state setupSharedMemory() override;
@@ -24,6 +25,5 @@ public:
 
 
 protected:
-
 
 };

@@ -66,6 +66,10 @@ int Laser::recieveData() {
 }
 
 error_state Laser::setupSharedMemory() {
+
+
+
+
 	return SUCCESS;
 }
 
@@ -74,7 +78,13 @@ error_state Laser::processSharedMemory() {
 }
 
 bool Laser::getShutdownFlag() {
-	return 0;
+
+	SMObject PMMObj(TEXT("PMMObj"), sizeof(SM_ProcessManagement));
+	SM_ProcessManagement* PMMPtr;
+	PMMObj.SMAccess();
+	PMMPtr = (SM_ProcessManagement*)PMMObj.pData;
+
+	return PMMPtr->Shutdown.Flags.Laser;
 }
 
 error_state Laser::setHeartbeat(bool heartbeat) {
