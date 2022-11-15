@@ -4,7 +4,7 @@
 
 #define ip "127.0.0.1"
 #define portNum 23000
-#define zid 5257944
+#define zid 5309962
 
 using namespace System;
 using namespace System::Diagnostics;

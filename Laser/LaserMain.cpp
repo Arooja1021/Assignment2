@@ -14,7 +14,7 @@ int main() {
 	PMObj.SMAccess();
 	PMMPtr = (SM_ProcessManagement*)PMObj.pData;
 	
-	while (!PMMPtr->Shutdown.Status) {
+	while (1) {
 		
 	}
 

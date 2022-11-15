@@ -1,8 +1,9 @@
-
+#pragma once
 
 #include <PMM.h>
 #include <SMObject.h>
 #include <smstructs.h>
+#include <conio.h>
 
 using namespace System;
 
@@ -12,7 +13,6 @@ using namespace System::Diagnostics;
 error_state ProcessManagement::setupSharedMemory() {
 	SMObject PMObj(TEXT("PMMObj"), sizeof(SM_ProcessManagement));
 	PMObj.SMCreate();
-	PMObj.SMAccess();
 	return SUCCESS;
 }
 
@@ -52,14 +52,17 @@ error_state ProcessManagement::processSharedMemory() {
 
 // Signal shutdown of all processes on normal termination
 void ProcessManagement::shutdownModules() {
-	SMObject PMObj(TEXT("PMObj"), sizeof(SM_ProcessManagement));
-	SM_ProcessManagement *PMMPtr;
-	PMObj.SMAccess();
-	PMMPtr = (SM_ProcessManagement*)PMObj.pData;
+	//SMObject PMObj(TEXT("PMObj"), sizeof(SM_ProcessManagement));
+	SMObject* PMObj = new SMObject(PMArray, sizeof(SM_ProcessManagement));
+
+	SM_ProcessManagement *PMMPtr = nullptr;
+	PMObj->SMAccess();
+	ProcessManagementData = (SMObject*)PMObj->pData;
+
 	
 	
 
-	PMMPtr->Shutdown.Status = 0x00;
+	//ProcessManagementData->Shutdown.Status = 0x00;
 
 	Console::WriteLine(PMMPtr->Shutdown.Status);
 }

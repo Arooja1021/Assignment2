@@ -126,9 +126,6 @@
     <ClCompile Include="PMM.cpp" />
     <ClCompile Include="PMMMain.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="PMM.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
