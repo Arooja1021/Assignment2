@@ -8,7 +8,9 @@ int main(void) {
 
 
 	myPM.setupSharedMemory();
+
 	myPM.shutdownModules();
+	myPM.startupProcesses();
 
 	while (!_kbhit()) {
 

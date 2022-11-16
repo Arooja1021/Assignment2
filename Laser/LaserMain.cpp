@@ -7,12 +7,8 @@ int main() {
 	laser->recieveData();
 
 	
-		
-	SMObject PMObj(TEXT("PMObj"), sizeof(SM_ProcessManagement));
-	SM_ProcessManagement* PMMPtr;
-		
-	PMObj.SMAccess();
-	PMMPtr = (SM_ProcessManagement*)PMObj.pData;
+	laser->getShutdownFlag();
+	
 	
 	while (1) {
 		

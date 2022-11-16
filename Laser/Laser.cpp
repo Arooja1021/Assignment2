@@ -2,7 +2,7 @@
 #include <smstructs.h>
 #include <SMObject.h>
 
-#define ip "127.0.0.1"
+#define ip "192.168.1.200"
 #define portNum 23000
 #define zid 5309962
 
@@ -79,12 +79,19 @@ error_state Laser::processSharedMemory() {
 
 bool Laser::getShutdownFlag() {
 
-	SMObject PMMObj(TEXT("PMMObj"), sizeof(SM_ProcessManagement));
-	SM_ProcessManagement* PMMPtr;
-	PMMObj.SMAccess();
-	PMMPtr = (SM_ProcessManagement*)PMMObj.pData;
+	SMObject* PMObj = new SMObject(TEXT("PMMObj"), sizeof(SM_ProcessManagement));
 
-	return PMMPtr->Shutdown.Flags.Laser;
+	//sSM_ProcessManagement *PMMPtr = nullptr;
+	PMObj->SMAccess();
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)PMObj->pData;
+
+
+
+
+	PMMPtr->Shutdown.Status = 0xFF;
+
+	Console::WriteLine(PMMPtr->Shutdown.Status);
+	return 0;
 }
 
 error_state Laser::setHeartbeat(bool heartbeat) {
