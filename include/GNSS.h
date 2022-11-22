@@ -4,7 +4,7 @@
 #include <smstructs.h>
 #include <networked_module.h>
 
-
+#pragma pack (1)
 struct GPS
 {
 	unsigned int Header;
@@ -35,10 +35,10 @@ public:
 	error_state connect(String^ hostName, int portNumber) override;
 	error_state communicate() override;
 
-	int connect() override;
+
 
 
 
 protected:
-
+	SMObject* GPSData;
 };

@@ -1,17 +1,23 @@
 #include <Laser.h>
+#include <chrono>
+#include <thread>
+#define ip "127.0.0.1"
+#define portNum 23000
 
 int main() {
 
 	Laser^ laser = gcnew Laser();
-	laser->connect();
-	laser->recieveData();
+	laser->connect(ip, portNum);
+	laser->setupSharedMemory();
 
 	
-	laser->getShutdownFlag();
 	
 	
-	while (1) {
-		
+	
+	
+	while (!laser->getShutdownFlag()) {
+		laser->communicate();
+
 	}
 
 

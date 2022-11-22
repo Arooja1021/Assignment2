@@ -86,40 +86,44 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Software\MATLAB\extern\include;$(SolutionDir)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SMLib_Debug_x64.lib </AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libmx.lib;libmex.lib;libmat.lib;libeng.lib;SMLib_Debug_x64.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Software\MATLAB\extern\lib\win64\microsoft;$(SolutionDir)lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Software\MATLAB\extern\include;$(SolutionDir)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SMLib_Debug_x86.lib</AdditionalDependencies>
+      <AdditionalDependencies>SMLib_Debug_x86.lib;libmx.lib;libmex.lib;libmat.lib;libeng.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Software\MATLAB\extern\lib\win64\microsoft;$(SolutionDir)lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Software\MATLAB\extern\include;$(SolutionDir)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SMLib_Release_x86.lib</AdditionalDependencies>
+      <AdditionalDependencies>SMLib_Release_x86.lib;libmx.lib;libmex.lib;libmat.lib;libeng.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Software\MATLAB\extern\lib\win64\microsoft;$(SolutionDir)lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Software\MATLAB\extern\include;$(SolutionDir)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SMLib_Release_x64.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SMLib_Release_x64.lib;libmx.lib;libmex.lib;libmat.lib;libeng.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Software\MATLAB\extern\lib\win64\microsoft;$(SolutionDir)lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

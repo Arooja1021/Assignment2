@@ -20,10 +20,7 @@ public:
 	error_state connect(String^ hostName, int portNumber) override;
 	error_state communicate() override;
 
-	int connect() override;
-	int recieveData() override;
-
 
 protected:
-
+	SMObject* LaserData;
 };

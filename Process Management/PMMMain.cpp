@@ -9,12 +9,14 @@ int main(void) {
 
 	myPM.setupSharedMemory();
 
-	myPM.shutdownModules();
+	
 	myPM.startupProcesses();
+
 
 	while (!_kbhit()) {
 
 	}
+	myPM.shutdownModules();
 
 
 	return 0;

@@ -1,10 +1,20 @@
 #include <GNSS.h>
+#include <chrono>
+#include <thread>
+#define ip "127.0.0.1"
+#define portNum 24000
 
 int main() {
 
 	GNSS^ gnss = gcnew GNSS();
-	gnss->connect();
-	while (1) {}
+	gnss->setupSharedMemory();
+	gnss->connect(ip, portNum);
+
+	while (!gnss->getShutdownFlag()) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		gnss->communicate();
+	
+	}
 	return 0;
 
 }

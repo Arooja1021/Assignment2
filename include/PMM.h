@@ -15,7 +15,6 @@ value struct WeederProcessess
 
 ref class ProcessManagement : public UGV_module {
 public:
-    SMObject* tes;
     // Create and access shared memory objects
     error_state setupSharedMemory() override;
 
@@ -40,7 +39,7 @@ private:
     // ensure you do not have any duplicates due to this
     SMObject* ControllerData;
     SMObject* DisplayData;
-    SMObject* GNSSData;
+    SMObject* GPSData;
     SMObject* LaserData;
     SMObject* VCData;
 
