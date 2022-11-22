@@ -27,5 +27,6 @@ public:
 
 protected:
 	SMObject* ControllerData;
+	int crashTimer;
 
 };

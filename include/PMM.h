@@ -42,5 +42,12 @@ private:
     SMObject* GPSData;
     SMObject* LaserData;
     SMObject* VCData;
+    int crashTimer;
+    int LaserCrash;
+    int GNSSCrash;
+    int ControllerCrash;
+    int VCCrash;
+    int DisplayCrash;
+    array<WeederProcessess>^ ProcessList;
 
 };

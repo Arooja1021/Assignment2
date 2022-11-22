@@ -13,7 +13,12 @@ int main(void) {
 	myPM.startupProcesses();
 
 
-	while (!_kbhit()) {
+	while (!myPM.getShutdownFlag()) {
+		if (_kbhit()) {
+			break;
+		}
+		myPM.setHeartbeat(1);
+		myPM.processSharedMemory();
 
 	}
 	myPM.shutdownModules();

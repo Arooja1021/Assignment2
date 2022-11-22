@@ -33,6 +33,24 @@ error_state Controller::setupSharedMemory() {
 }
 
 error_state Controller::processSharedMemory() {
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	bool ready = PMMPtr->Ready.Flags.ProcessManagement;
+	bool heartbeat = PMMPtr->Heartbeat.Flags.ProcessManagement;
+
+	if (!ready || heartbeat) {
+		PMMPtr->Heartbeat.Flags.ProcessManagement = 0;
+		crashTimer = 0;
+	}
+	else {
+		crashTimer++;
+		Threading::Thread::Sleep(50);
+	}
+
+
+	if (crashTimer > 30) {
+		PMMPtr->Shutdown.Status = 0xFF;
+	}
+
 	return SUCCESS;
 }
 
@@ -42,16 +60,29 @@ bool Controller::getShutdownFlag() {
 }
 
 error_state Controller::setHeartbeat(bool heartbeat) {
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	PMMPtr->Heartbeat.Flags.Controller = heartbeat;
 	return SUCCESS;
 }
 
 error_state Controller::getControlData() {
 
-	ControllerInterface* contInt = new ControllerInterface(1, 1);
-	controllerState contState = contInt->GetState();
+	SM_VehicleControl* VCPtr = (SM_VehicleControl*)ControllerData;
+	ControllerInterface* Controller = new ControllerInterface(1, 1);
+	if (!Controller->IsConnected()) {
+		VCPtr->Speed = 0;
+		VCPtr->Steering = 0;
+		return SUCCESS;
+	}
+	controllerState contState = Controller->GetState();
+	if (contState.buttonB) {
+		SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+		PMMPtr->Shutdown.Flags.ProcessManagement = 1;
+		return SUCCESS;
+	}
 	double speed = contState.rightTrigger - contState.leftTrigger;
 	double steer = -contState.rightThumbX * 40;
-	SM_VehicleControl* VCPtr = (SM_VehicleControl*)ControllerData;
+	
 	VCPtr->Speed = speed;
 	VCPtr->Steering = steer;
 

@@ -41,4 +41,5 @@ public:
 
 protected:
 	SMObject* GPSData;
+	int crashTimer;
 };

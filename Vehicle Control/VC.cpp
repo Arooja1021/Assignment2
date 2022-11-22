@@ -75,6 +75,23 @@ error_state VC::setupSharedMemory() {
 }
 
 error_state VC::processSharedMemory() {
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	bool ready = PMMPtr->Ready.Flags.ProcessManagement;
+	bool heartbeat = PMMPtr->Heartbeat.Flags.ProcessManagement;
+	if (!ready || heartbeat) {
+		PMMPtr->Heartbeat.Flags.ProcessManagement = 0;
+		crashTimer = 0;
+	}
+	else {
+		crashTimer++;
+		Threading::Thread::Sleep(50);
+	}
+
+
+	if (crashTimer > 30) {
+		PMMPtr->Shutdown.Status = 0xFF;
+	}
+
 	return SUCCESS;
 }
 
@@ -89,6 +106,9 @@ bool VC::getShutdownFlag() {
 }
 
 error_state VC::setHeartbeat(bool heartbeat) {
+
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	PMMPtr->Heartbeat.Flags.VehicleControl = heartbeat;
 	return SUCCESS;
 }
 

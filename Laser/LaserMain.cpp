@@ -17,7 +17,8 @@ int main() {
 	
 	while (!laser->getShutdownFlag()) {
 		laser->communicate();
-
+		laser->processSharedMemory();
+		laser->setHeartbeat(0);
 	}
 
 

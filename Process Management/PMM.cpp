@@ -4,6 +4,8 @@
 #include <SMObject.h>
 #include <smstructs.h>
 #include <conio.h>
+#include <chrono>
+#include <thread>
 
 using namespace System;
 
@@ -22,7 +24,8 @@ error_state ProcessManagement::setupSharedMemory() {
 		Console::WriteLine("Access Error");
 	}
 	ProcessManagementData = (SMObject*)PMObj->pData;
-
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	PMMPtr->Ready.Flags.ProcessManagement = 1;
 
 	SMObject* LaserObj = new SMObject(TEXT("LaserObj"), sizeof(SM_Laser));
 
@@ -45,7 +48,11 @@ error_state ProcessManagement::setupSharedMemory() {
 	if (VCObj->SMCreate() == SM_CREATE_ERROR) {
 		Console::WriteLine("Create Error");
 	}
-
+	int LaserCrash = 0;
+	int GNSSCrash = 0;
+	int ControllerCrash = 0;
+	int VCCrash = 0;
+	int DisplayCrash = 0;
 
 
 
@@ -56,13 +63,13 @@ error_state ProcessManagement::setupSharedMemory() {
 
 error_state ProcessManagement::startupProcesses() {
 
-	array<WeederProcessess>^ ProcessList = gcnew array<WeederProcessess>
+	ProcessList = gcnew array<WeederProcessess>
 	{
 		{"Laser", true, 0, 10, gcnew Process},
 		{ "GNSS", true, 0, 10, gcnew Process },
 		{ "Controller", true, 0, 10, gcnew Process },
-		{ "Display", true, 0, 10, gcnew Process },
 		{ "Vehicle Control", true, 0, 10, gcnew Process },
+		{ "Display", true, 0, 10, gcnew Process },
 
 	};
 
@@ -88,7 +95,61 @@ error_state ProcessManagement::startupProcesses() {
 
 // Recieve/update data from process management shared memory structure about the state of all modules
 error_state ProcessManagement::processSharedMemory() {
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	if (PMMPtr->Heartbeat.Flags.Laser) {
+		LaserCrash++;
+	}
+	else {
+		LaserCrash = 0;
+		PMMPtr->Heartbeat.Flags.Laser = 1;
+	}
+	if (PMMPtr->Heartbeat.Flags.GPS) {
+		GNSSCrash++;
+	}
+	else {
+		GNSSCrash = 0;
+		PMMPtr->Heartbeat.Flags.GPS = 1;
+	}
+	if (PMMPtr->Heartbeat.Flags.Controller) {
+		ControllerCrash++;
+	}
+	else {
+		ControllerCrash = 0;
+		PMMPtr->Heartbeat.Flags.Controller = 1;
+	}
+	if (PMMPtr->Heartbeat.Flags.VehicleControl) {
+		VCCrash++;
+	}
+	else {
+		VCCrash = 0;
+		PMMPtr->Heartbeat.Flags.VehicleControl = 1;
+	}
+	if (PMMPtr->Heartbeat.Flags.Display) {
+		DisplayCrash++;
+	}
+	else {
+		DisplayCrash = 0;
+		PMMPtr->Heartbeat.Flags.Display = 1;
+	}
 
+	if (LaserCrash > 100) {
+		shutdownModules();
+	}
+	if (GNSSCrash > 100) {
+		ProcessList[1].ProcessName->Start();
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	}
+	if (ControllerCrash > 100) {
+		shutdownModules();
+	}
+	if (VCCrash > 100) {
+		shutdownModules();
+	}
+	if (DisplayCrash > 100) {
+		shutdownModules();
+	}
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	return SUCCESS;
 }
 
@@ -98,18 +159,33 @@ void ProcessManagement::shutdownModules() {
 	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
 
 	
-	PMMPtr->Shutdown.Status = 0xFF;
+	PMMPtr->Shutdown.Flags.Laser = 1;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	PMMPtr->Shutdown.Flags.GPS = 1;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	PMMPtr->Shutdown.Flags.Controller = 1;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	PMMPtr->Shutdown.Flags.VehicleControl = 1;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	PMMPtr->Shutdown.Flags.Display = 1;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	PMMPtr->Shutdown.Flags.ProcessManagement = 1;
 
-	Console::WriteLine(PMMPtr->Shutdown.Status);
 
 }
 
 // Get Shutdown signal for module, from Process Management SM
 bool ProcessManagement::getShutdownFlag() {
-	return false;
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+
+
+	
+	return PMMPtr->Shutdown.Flags.ProcessManagement;
 }
 
 // Update heartbeat signal for process management
 error_state ProcessManagement::setHeartbeat(bool heartbeat) {
+	SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+	PMMPtr->Heartbeat.Flags.ProcessManagement = heartbeat;
 	return SUCCESS;
 }

@@ -9,14 +9,10 @@ int main() {
 	vc->connect(ip, portNum);
 	
 
-
-
-
-
-
 	while (!vc->getShutdownFlag()) {
 		vc->communicate();
-
+		vc->processSharedMemory();
+		vc->setHeartbeat(0);
 	}
 
 

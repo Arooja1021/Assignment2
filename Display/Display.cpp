@@ -107,10 +107,29 @@ bool Display::getShutdownFlag() {
 
 // Update heartbeat signal for process management
 error_state Display::setHeartbeat(bool heartbeat) {
+    SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+    PMMPtr->Heartbeat.Flags.Display = heartbeat;
     return SUCCESS;
 }
 
 error_state Display::processSharedMemory() {
+    SM_ProcessManagement* PMMPtr = (SM_ProcessManagement*)ProcessManagementData;
+    bool ready = PMMPtr->Ready.Flags.ProcessManagement;
+    bool heartbeat = PMMPtr->Heartbeat.Flags.ProcessManagement;
+
+    if (!ready || heartbeat) {
+        PMMPtr->Heartbeat.Flags.ProcessManagement = 0;
+        crashTimer = 0;
+    }
+    else {
+        crashTimer++;
+        Threading::Thread::Sleep(50);
+    }
+
+
+    if (crashTimer > 30) {
+        PMMPtr->Shutdown.Status = 0xFF;
+    }
 
     return SUCCESS;
 }

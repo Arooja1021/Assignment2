@@ -23,4 +23,5 @@ public:
 
 protected:
 	SMObject* LaserData;
+	int crashTimer;
 };

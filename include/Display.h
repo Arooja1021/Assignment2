@@ -41,5 +41,6 @@ private:
     SMObject* LaserData;
     int plotCreated;
     engine* ep;
+    int crashTimer;
 
 };
